@@ -16,36 +16,96 @@
             color: #ff69b4;
             margin-top: 50px;
         }
-        audio {
+        .song-container {
             margin-top: 20px;
+        }
+        audio {
             width: 80%;
             max-width: 400px;
+            display: block;
+            margin: 10px auto;
         }
-        button {
+        button, input[type="text"], #submitRequest {
             margin-top: 20px;
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 10px 20px;
+            font-size: 16px;
             border: none;
-            background-color: pink;
-            color: white;
             border-radius: 10px;
             cursor: pointer;
             transition: 0.3s;
         }
+        button {
+            background-color: pink;
+            color: white;
+        }
         button:hover {
+            background-color: #ff1493;
+        }
+        input[type="text"] {
+            width: 60%;
+            padding: 10px;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+        }
+        #submitRequest {
+            background-color: #ff69b4;
+            color: white;
+        }
+        #submitRequest:hover {
             background-color: #ff1493;
         }
     </style>
 </head>
 <body>
     <h1>Music Sync 🎶</h1>
-    <audio id="musicPlayer" controls autoplay></audio>
-    <button onclick="location.href='dashboard.html'">Back to Dashboard</button>
-    <script>
-        const musicPlayer = document.getElementById("musicPlayer");
-        musicPlayer.src = "https://firebasestorage.googleapis.com/v0/b/songs-ce5f3.firebasestorage.app/o/Blue%20acoustic.mp3?alt=media&token=4397acba-9fe2-418b-ae5f-b9bc51472c67";
-        musicPlayer.load();
-        musicPlayer.play().catch(error => console.log("Autoplay blocked:", error));
-    </script>
+    <div class="song-container">
+        <h2>Blue Acoustic</h2>
+        <audio controls>
+            <source src="https://firebasestorage.googleapis.com/v0/b/songs-ce5f3.firebasestorage.app/o/Blue%20acoustic.mp3?alt=media&token=4397acba-9fe2-418b-ae5f-b9bc51472c67" type="audio/mp3">
+        </audio><h2>Here With Me</h2>
+    <audio controls>
+        <source src="https://firebasestorage.googleapis.com/v0/b/songs-ce5f3.firebasestorage.app/o/Here%20with%20me.mp3?alt=media&token=1da02027-2d3b-404e-a63f-12cb8a2e1f01" type="audio/mp3">
+    </audio>
+</div>
+
+<h2>Suggest a Song</h2>
+<input type="text" id="songRequest" placeholder="Enter song name">
+<button id="submitRequest">Submit</button>
+<br>
+<button onclick="location.href='dashboard.html'">Back to Dashboard</button>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCKd4Yt2XcLAdHt2HHwuNRoilug96JT6bw",
+        authDomain: "songs-ce5f3.firebaseapp.com",
+        databaseURL: "https://songs-ce5f3-default-rtdb.firebaseio.com",
+        projectId: "songs-ce5f3",
+        storageBucket: "songs-ce5f3.appspot.com",
+        messagingSenderId: "903689554526",
+        appId: "1:903689554526:web:f121ded6313b99277e82cf",
+        measurementId: "G-J5N88MVM65"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    document.getElementById("submitRequest").addEventListener("click", () => {
+        const songName = document.getElementById("songRequest").value.trim();
+        if (songName) {
+            push(ref(database, "SongRequests"), { name: songName }).then(() => {
+                alert("Song request submitted successfully!");
+                document.getElementById("songRequest").value = "";
+            }).catch(error => {
+                alert("Error submitting request: " + error.message);
+            });
+        } else {
+            alert("Please enter a song name.");
+        }
+    });
+</script>
+
 </body>
 </html>
