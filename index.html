@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,49 +39,13 @@
 </head>
 <body>
     <h1>Music Sync 🎶</h1>
-    <audio id="musicPlayer" controls></audio>
-    <button onclick="playMusic()">Play Our Song 🎶</button>
+    <audio id="musicPlayer" controls autoplay></audio>
     <button onclick="location.href='dashboard.html'">Back to Dashboard</button>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyCKd4Yt2XcLAdHt2HHwuNRoilug96JT6bw",
-            authDomain: "songs-ce5f3.firebaseapp.com",
-            databaseURL: "https://songs-ce5f3-default-rtdb.firebaseio.com",
-            projectId: "songs-ce5f3",
-            storageBucket: "songs-ce5f3.firebasestorage.app",
-            messagingSenderId: "903689554526",
-            appId: "1:903689554526:web:f121ded6313b99277e82cf",
-            measurementId: "G-J5N88MVM65"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        const musicRef = ref(database, 'song1'); // Make sure the song is under 'song1'
+    <script>
         const musicPlayer = document.getElementById("musicPlayer");
-
-        onValue(musicRef, (snapshot) => {
-            const url = snapshot.val();
-            console.log("Fetched URL:", url);  // Log the URL to check if it's being fetched
-            if (url) {
-                musicPlayer.src = url;
-                console.log("Audio source set successfully.");
-            } else {
-                console.log("No song URL found in Firebase.");
-            }
-        });
-
-        // Play the music manually
-        function playMusic() {
-            const musicPlayer = document.getElementById("musicPlayer");
-            musicPlayer.play()
-                .then(() => console.log("Music is playing"))
-                .catch((error) => console.error("Error playing music:", error));
-        }
+        musicPlayer.src = "https://firebasestorage.googleapis.com/v0/b/songs-ce5f3.firebasestorage.app/o/Blue%20acoustic.mp3?alt=media&token=4397acba-9fe2-418b-ae5f-b9bc51472c67";
+        musicPlayer.load();
+        musicPlayer.play().catch(error => console.log("Autoplay blocked:", error));
     </script>
 </body>
 </html>
